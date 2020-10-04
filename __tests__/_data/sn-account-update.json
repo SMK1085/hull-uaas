@@ -1,0 +1,428 @@
+{
+  "connector": {
+    "manual_mode": false,
+    "transfer_exports": true,
+    "accept_incoming_webhooks": true,
+    "source_url": "https://hull-uaas.eu.ngrok.io/",
+    "private_settings": {
+      "account_mappings_quorum": [{
+        "name": "unified/country",
+        "sources": [
+          "country",
+          "societeinfo/address_country",
+          "prestashopsql/country"
+        ]
+      }],
+      "account_normalizations": [{
+        "method": "COUNTRY_NAME_OFFICIAL",
+        "sources": [
+          "country",
+          "societeinfo/address_country",
+          "prestashopsql/country"
+        ]
+      }]
+    },
+    "index": "https://hull-uaas.eu.ngrok.io/",
+    "name": "hull-uaas.eu.ngrok.io/",
+    "transfer_notifications": true,
+    "settings": {},
+    "type": "ship",
+    "manifest": {
+      "description": "Hull Unification-as-a-Service",
+      "tags": [
+        "oneColumn",
+        "smart-notifier",
+        "outgoing"
+      ],
+      "private_settings": [{
+          "name": "account_mappings_quorum",
+          "type": "array",
+          "title": "Unified Attributes defined by Quorum",
+          "description": "The attributes to define by using the quorum strategy.",
+          "format": "table",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Unified Attribute Name",
+                "type": "string",
+                "format": "accountTrait",
+                "options": {
+                  "allowCreate": true,
+                  "source": "unified"
+                }
+              },
+              "sources": {
+                "title": "Source Attributes",
+                "type": "array",
+                "format": "accountTrait",
+                "options": {
+                  "uniqueItems": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "account_normalizations",
+          "type": "array",
+          "title": "Attribute Value Normalizations",
+          "description": "The attributes to normalize before applying unification",
+          "format": "table",
+          "items": {
+            "type": "object",
+            "properties": {
+              "method": {
+                "title": "Method",
+                "type": "string",
+                "format": "select",
+                "options": {
+                  "allowCreate": false,
+                  "loadOptions": "/meta/methods/normalization",
+                  "placeholder": "Normalization Method"
+                }
+              },
+              "sources": {
+                "title": "Source Attributes",
+                "type": "array",
+                "format": "accountTrait",
+                "options": {
+                  "uniqueItems": true
+                }
+              }
+            }
+          }
+        }
+      ],
+      "tabs": [],
+      "name": "hull-uaas",
+      "settings": [],
+      "subscriptions": [{
+        "url": "/smart-notifier"
+      }],
+      "ui": false,
+      "picture": "picture.png",
+      "readme": "readme.md",
+      "schedules": [],
+      "version": "1.0.0"
+    },
+    "secret": "09916d0a6290baf63821dc3ab5c467bf",
+    "updated_at": "2020-09-22T06:24:10Z",
+    "status": {
+      "updated_at": "2020-09-22T06:28:09Z",
+      "name": "hull-uaas.eu.ngrok.io/",
+      "id": "5f6733cf0fe58e18aec94f8a"
+    },
+    "id": "5f6733cf0fe58e18aec94f8a",
+    "picture": "https://hull-uaas.eu.ngrok.io/picture.png",
+    "homepage_url": "https://cd988149.hullapp.io/ships/5f6733cf0fe58e18aec94f8a",
+    "manifest_url": "https://hull-uaas.eu.ngrok.io/manifest.json",
+    "poll_scheduled_calls": true,
+    "created_at": "2020-09-20T10:49:51Z"
+  },
+  "accounts_segments": [{
+      "id": "5ef06de42f3f2f25b41f8dd0",
+      "updated_at": "2020-06-22T08:37:56Z",
+      "created_at": "2020-06-22T08:37:56Z",
+      "name": "[Enrich] BuiltWith",
+      "type": "accounts_segment",
+      "stats": {}
+    },
+    {
+      "id": "5ef8a27c66d66dcb56b9cbed",
+      "updated_at": "2020-06-28T14:00:28Z",
+      "created_at": "2020-06-28T14:00:28Z",
+      "name": "[Testing] All Test Accounts",
+      "type": "accounts_segment",
+      "stats": {}
+    },
+    {
+      "id": "5f0897170fe58ecf470f15ee",
+      "updated_at": "2020-07-10T16:28:07Z",
+      "created_at": "2020-07-10T16:28:07Z",
+      "name": "[SQL TEST] Foo Accounts",
+      "type": "accounts_segment",
+      "stats": {}
+    },
+    {
+      "id": "5f0f3df883e0f314be97cb16",
+      "updated_at": "2020-07-15T17:33:44Z",
+      "created_at": "2020-07-15T17:33:44Z",
+      "name": "[Google Page Speed Insights] Trigger",
+      "type": "accounts_segment",
+      "stats": {}
+    },
+    {
+      "id": "5f58b3d183e0f388257ad185",
+      "updated_at": "2020-09-09T11:44:33Z",
+      "created_at": "2020-09-09T10:52:01Z",
+      "name": "VStat to Enrich",
+      "type": "accounts_segment",
+      "stats": {}
+    }
+  ],
+  "channel": "account:update",
+  "is_export": false,
+  "segments": [{
+      "id": "5e08c8938ee92e958601d6fd",
+      "updated_at": "2019-12-29T15:38:59Z",
+      "created_at": "2019-12-29T15:38:59Z",
+      "name": "Hubspot Contacts",
+      "type": "users_segment",
+      "stats": {}
+    },
+    {
+      "id": "5ebd6b554aa88c8b6898eaa8",
+      "updated_at": "2020-05-14T16:01:25Z",
+      "created_at": "2020-05-14T16:01:25Z",
+      "name": "SFDC Contacts w/ Dependent Object",
+      "type": "users_segment",
+      "stats": {}
+    },
+    {
+      "id": "5ef58db40fe58e5ca2f9abb8",
+      "updated_at": "2020-06-26T05:55:00Z",
+      "created_at": "2020-06-26T05:55:00Z",
+      "name": "Freshdesk Contacts",
+      "type": "users_segment",
+      "stats": {}
+    },
+    {
+      "id": "5f23aad5e42ce8d8689ce4e7",
+      "updated_at": "2020-07-31T05:23:33Z",
+      "created_at": "2020-07-31T05:23:33Z",
+      "name": "[Testing] SQL Exporter Users",
+      "type": "users_segment",
+      "stats": {}
+    },
+    {
+      "id": "5f23ab03e42ce8b77d9ce4f3",
+      "updated_at": "2020-07-31T05:24:19Z",
+      "created_at": "2020-07-31T05:24:19Z",
+      "name": "[Testing] Merged Users",
+      "type": "users_segment",
+      "stats": {}
+    },
+    {
+      "id": "5f61ac164aa88cf4025d5930",
+      "updated_at": "2020-09-16T06:09:26Z",
+      "created_at": "2020-09-16T06:09:26Z",
+      "name": "[Customer.io] Synchronization",
+      "type": "users_segment",
+      "stats": {}
+    }
+  ],
+  "messages": [{
+    "notification-timestamp": 1600756086,
+    "uuid": "0cf62d44-764e-4b12-98e3-a6ed0784085a",
+    "org-id": "5df3821a1670868092003422",
+    "changes": {
+      "is_new": false,
+      "account": {
+        "data_ops/refreshed_at": [
+          null,
+          "2020-09-22T06:27:48.062Z"
+        ]
+      },
+      "account_segments": {}
+    },
+    "account": {
+      "societeinfo/legal_code_level3": "5710",
+      "builtwith/attribute_ref_ip": 0,
+      "builtwith/meta_alexa_rank": 0,
+      "builtwith/technologies_premium": [],
+      "google_psi_performance_mobile/lighthouse_final_url": "https://www.mon-orangerie.fr/",
+      "google_psi_performance_desktop/analysis_date": "2020-08-15T03:46:38.127Z",
+      "google_psi_performance_mobile/lighthouse_audits_speed_index_display": "12.3Â s",
+      "builtwith/attribute_c_metrics": 0,
+      "google_psi_performance_desktop/lighthouse_audits_speed_index": 4592.455326236533,
+      "societeinfo/risk_risk_level_description": "Pas de risque identifiÃ©",
+      "builtwith/meta_q_rank": 0,
+      "societeinfo/risk_collective_procedure_in_progress": false,
+      "societeinfo/financials_2019_profit": 219927,
+      "societeinfo/address_lng": -0.4661,
+      "societeinfo/financials_2011_profit": 158190,
+      "builtwith/attribute_ref_sn": 0,
+      "societeinfo/risk_collective_procedures": [],
+      "societeinfo/status": "Active",
+      "builtwith/attribute_ttfb": 0,
+      "societeinfo/activity_ape_code_level1": "GZ",
+      "builtwith/meta_emails": [],
+      "similarweb/last_enriched_at": "2020-09-10T08:09:26.294Z",
+      "hubspot/domain": "mon-orangerie.fr",
+      "google_psi_performance_desktop/id": "https://www.mon-orangerie.fr/",
+      "societeinfo/legal_code_level2": "57",
+      "societeinfo/address_city": "TIERCÃ",
+      "societeinfo/financials_2012_profit": 177350,
+      "societeinfo/web_infos_logo_url": "https://logo.clearbit.com/agrumesetoiles.com",
+      "google_psi_performance_desktop/lighthouse_audits_first_meaningful_paint": 3682,
+      "builtwith/is_db": true,
+      "societeinfo/name": "LES AGRUMES DE MEDITERRANEE",
+      "societeinfo/legal_type": "Siege",
+      "google_psi_performance_mobile/lighthouse_requested_url": "https://mon-orangerie.fr/",
+      "societeinfo/financials_2012_sales": 3091940,
+      "builtwith/attribute_c_dimensions": 0,
+      "societeinfo/financials_last_sales": 4794113,
+      "builtwith/attribute_sitemap": 0,
+      "google_psi_performance_mobile/lighthouse_audits_speed_index": 12325.131602268597,
+      "builtwith/last_indexed_at": "2020-06-15T23:00:00.000Z",
+      "societeinfo/vat_number": "FR14411542806",
+      "societeinfo/financials_2015_sales": 2801020,
+      "societeinfo/financials_2018_profit": 259794,
+      "external_id": "28786442",
+      "hubspot/hs_num_child_companies": "0",
+      "societeinfo/financials_2016_profit": 129150,
+      "societeinfo/activity_ape_name": "Commerce de gros (commerce interentreprises) de fleurs et plantes",
+      "societeinfo/financials_last_staff": 6,
+      "builtwith/meta_umbrella": 0,
+      "societeinfo/legal_code_level1": "5",
+      "societeinfo/registration_number": "411542806",
+      "societeinfo/legal_person_type": "LegalEntity",
+      "id": "5f6738dd2f3f2fdd1217c604",
+      "societeinfo/financials_2016_sales": 3133030,
+      "google_psi_performance_desktop/lighthouse_audits_first_contentful_paint": 2215,
+      "google_psi_performance_mobile/id": "https://www.mon-orangerie.fr/",
+      "societeinfo/financials_2014_profit": 78040,
+      "societeinfo/activity_ape_code_level2": "GZ",
+      "societeinfo/activity_ape_code_level5": "4622Z",
+      "prestashopsql/date_zcache": "2020-07-30T00:00:00.000Z",
+      "societeinfo/success": true,
+      "prestashopsql/date_active_since": "2019-10-17T00:00:00.000Z",
+      "societeinfo/risk_legal_source_organization_statuses": "[{\"organization_status\":\"Active\",\"source_name\":\"RCS\"},{\"organization_status\":\"Active\",\"source_name\":\"INSEE\"},{\"organization_status\":\"Active\",\"source_name\":\"Bodacc\"}]",
+      "societeinfo/founded_year": 1997,
+      "google_psi_performance_desktop/lighthouse_version": "6.1.0",
+      "societeinfo/financials_2018_staff": 6,
+      "societeinfo/establishments_count": 1,
+      "societeinfo/match_info_score": 1,
+      "google_psi_performance_mobile/lighthouse_audits_first_meaningful_paint": 11302.5,
+      "prestashopsql/country": "fr",
+      "prestashopsql/is_primary_account": true,
+      "google_psi_performance_desktop/lighthouse_audits_time_to_interactive_display": "4.4Â s",
+      "name": "mon-orangerie.fr",
+      "societeinfo/enriched_at": "2020-09-11T18:55:34.895Z",
+      "google_psi_performance_desktop/lighthouse_audits_first_meaningful_paint_display": "3.7Â s",
+      "builtwith/spend": 0,
+      "prestashopsql/customer_ip": "195.216.141.154",
+      "builtwith/attribute_source_bytes": 0,
+      "societeinfo/financials_2011_sales": 3260170,
+      "prestashopsql/hashlogo": "f26a729288d46744c07532a964eac7b933db5436",
+      "google_psi_performance_mobile/lighthouse_audits_time_to_interactive": 14934.5,
+      "societeinfo/financials_2017_profit": 192599,
+      "google_psi_performance_mobile/lighthouse_audits_first_contentful_paint": 6795,
+      "similarweb/last_enriched_noresult_reason": "SimilarWeb doesn't have enough data for this website.",
+      "builtwith/last_enriched_at": "2020-08-15T13:28:55.039Z",
+      "builtwith/first_indexed_at": "2019-11-02T23:00:00.000Z",
+      "builtwith/attribute_tealium_tags": 0,
+      "societeinfo/activity_ape_code": "4622Z",
+      "societeinfo/financials_2011_staff": 4,
+      "google_psi_performance_desktop/lighthouse_final_url": "https://www.mon-orangerie.fr/",
+      "hubspot/num_associated_contacts": 0,
+      "google_psi_performance_desktop/lighthouse_requested_url": "https://mon-orangerie.fr/",
+      "prestashopsql/bo_language": "fr",
+      "builtwith/technologies_all": [
+        "SPF",
+        "OVH Mail",
+        "OVH DNS",
+        "OVH"
+      ],
+      "builtwith/meta_majestic": 0,
+      "anonymous_ids": [
+        "hubspot:4268494479",
+        "hps:ef23c148-820e-41ff-bafc-3e5277b17aca"
+      ],
+      "domain": "mon-orangerie.fr",
+      "societeinfo/capital": "150000",
+      "google_psi_performance_mobile/lighthouse_audits_first_meaningful_paint_display": "11.3Â s",
+      "societeinfo/financials_2014_sales": 2497640,
+      "builtwith/meta_vertical": "",
+      "phantombuster/timestamp": "2020-08-09T02:12:23.669Z",
+      "societeinfo/risk_risk_level": 0,
+      "indexed_at": "2020-09-22T06:28:06.112Z",
+      "phantombuster/facebookurl": "https://www.facebook.com/agrumesdemediterranee/",
+      "societeinfo/activity_ape_code_level4": "G46Z",
+      "builtwith/attribute_mjtld_rank": 0,
+      "google_psi_performance_desktop/lighthouse_audits_first_contentful_paint_display": "2.2Â s",
+      "data_ops/refreshed_at": "2020-09-22T06:27:48.062Z",
+      "societeinfo/creation_date": "1997-03-31T23:00:00.000Z",
+      "societeinfo/activity_ape_code_level3": "46",
+      "societeinfo/address_country": "FRANCE",
+      "societeinfo/address_street": "CHEMIN DES LANDES",
+      "societeinfo/address_country_code": "FR",
+      "builtwith/attribute_adobe_tags": 0,
+      "societeinfo/financials_2018_sales": 4496630,
+      "google_psi_performance_desktop/lighthouse_audits_time_to_interactive": 4394,
+      "societeinfo/activity_corporate_object": "Commerce de gros (commerce interentreprises) de fleurs et plantes",
+      "google_psi_performance_desktop/lighthouse_audits_time_to_first_byte_display": "Root document took 1,210Â ms",
+      "created_at": "2020-09-20T11:11:25.203Z",
+      "societeinfo/web_infos_facebook": "https://fr-fr.facebook.com/agrumesdemediterranee/",
+      "similarweb/last_enriched_noresult": true,
+      "societeinfo/financials_2017_sales": 3536808,
+      "google_psi_performance_mobile/lighthouse_audits_time_to_first_byte_display": "Root document took 1,060Â ms",
+      "google_psi_performance_desktop/lighthouse_audits_time_to_first_byte": 1208.99,
+      "societeinfo/legal_name": "SociÃ©tÃ© par actions simplifiÃ©e Ã  associÃ© unique",
+      "societeinfo/last_legal_update_date": "2020-07-08T23:00:00.000Z",
+      "phantombuster/twitterurl": "https://twitter.com/JardindAgrumes",
+      "prestashopsql/version": "1.7.6.1",
+      "societeinfo/web_infos_website_url": "http://www.agrumes.fr/",
+      "societeinfo/web_infos_linkedin": "https://www.linkedin.com/company/les-agrumes-de-mediterranee/",
+      "google_psi_performance_mobile/lighthouse_audits_time_to_first_byte": 1061.48,
+      "hubspot/id": 4268494479,
+      "prestashopsql/date_bo_update": "2020-07-31T07:16:03.000Z",
+      "google_psi_performance_mobile/lighthouse_audits_first_contentful_paint_display": "6.8Â s",
+      "builtwith/attribute_c_goals": 0,
+      "societeinfo/financials_2015_profit": 83440,
+      "societeinfo/financials_2019_sales": 4794113,
+      "hubspot/hs_lastmodified_date": "2020-09-16T19:34:53.000Z",
+      "builtwith/attribute_gtm_tags": 0,
+      "prestashopsql/source": "auto",
+      "builtwith/attribute_qubit_tags": 0,
+      "builtwith/attribute_mj_rank": 0,
+      "google_psi_performance_mobile/lighthouse_audits_time_to_interactive_display": "14.9Â s",
+      "google_psi_performance_mobile/analysis_date": "2020-08-15T03:46:55.523Z",
+      "societeinfo/greffe_name": "Angers",
+      "google_psi_performance_desktop/lighthouse_audits_speed_index_display": "4.6Â s",
+      "societeinfo/financials_last_profit": 219927,
+      "societeinfo/full_registration_number": "41154280600020",
+      "data_ops/aliased_linkedin_at": "2020-09-11T20:04:28.666Z",
+      "hubspot/create_date": "2020-08-03T23:43:55.000Z",
+      "hps_ops/url_has_redirect": false,
+      "societeinfo/id": "58795ea4b3a2806717873675",
+      "societeinfo/address_lat": 47.6159,
+      "societeinfo/financials_2017_staff": 6,
+      "societeinfo/address_postal_code": "49125",
+      "prestashopsql/date_install": "2019-10-03T07:09:25.000Z",
+      "hubspot/name": "mon-orangerie.fr",
+      "hubspot/website": "mon-orangerie.fr",
+      "hps_ops/id": "ef23c148-820e-41ff-bafc-3e5277b17aca",
+      "google_psi_performance_mobile/lighthouse_version": "6.1.0"
+    },
+    "account_segments": [],
+    "update_id": "cd988149.hullapp.io:accounts:172",
+    "message_id": "db454cdf295874ef489b20e46a94bd22a017dec9"
+  }],
+  "notification_id": "516fe772-932c-4853-96f5-d67bf20f8ee0",
+  "kraken": {
+    "retries": 0,
+    "checkpoints": {
+      "kraken.lane/commands": 124972,
+      "kraken.lane/accounts": 172,
+      "kraken.lane/std": 51636
+    },
+    "flow-control": {
+      "max-messages": 50,
+      "warning": null,
+      "min-delay": 1,
+      "max-delay": 10000,
+      "type": "next"
+    },
+    "estimated-optimal-shipment-size": 8,
+    "update-ids": [
+      "cd988149.hullapp.io:accounts:172"
+    ]
+  },
+  "configuration": {
+    "id": "5f6733cf0fe58e18aec94f8a",
+    "organization": "cd988149.hullapp.io",
+    "secret": "09916d0a6290baf63821dc3ab5c467bf"
+  }
+}
