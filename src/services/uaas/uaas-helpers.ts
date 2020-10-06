@@ -4,98 +4,114 @@ import countryData from "../../../assets/data/countries.json";
 
 export class UaasHelpers {
   public static sanitizeUrlStringValue(raw: string): string {
-    let result = raw;
-    const REGEX_WEBSITE = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-    if (REGEX_WEBSITE.test(raw)) {
-      result = normalizeUrl(raw, {
-        defaultProtocol: "https:",
-        forceHttps: true,
-        normalizeProtocol: true,
-        removeTrailingSlash: true,
-        sortQueryParameters: true,
-        stripAuthentication: true,
-        stripHash: true,
-        stripWWW: true,
-      });
+    try {
+      let result = raw;
+      const REGEX_WEBSITE = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+      if (REGEX_WEBSITE.test(raw)) {
+        result = normalizeUrl(raw, {
+          defaultProtocol: "https:",
+          forceHttps: true,
+          normalizeProtocol: true,
+          removeTrailingSlash: true,
+          sortQueryParameters: true,
+          stripAuthentication: true,
+          stripHash: true,
+          stripWWW: true,
+        });
 
-      // Strip out any paths or query strings
-      const urlObject = new URL(result);
-      result = `${urlObject.protocol}//${urlObject.hostname}`;
+        // Strip out any paths or query strings
+        const urlObject = new URL(result);
+        result = `${urlObject.protocol}//${urlObject.hostname}`;
+      }
+
+      return result;
+    } catch (error) {
+      return raw;
     }
-
-    return result;
   }
 
-  public static sanitizeLinkedInUrl(raw: string): string {
-    let result = raw;
-    const REGEX_WEBSITE = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-    if (REGEX_WEBSITE.test(raw)) {
-      result = normalizeUrl(raw, {
-        defaultProtocol: "https:",
-        forceHttps: true,
-        normalizeProtocol: true,
-        removeTrailingSlash: true,
-        sortQueryParameters: true,
-        stripAuthentication: true,
-        stripHash: true,
-        stripWWW: true,
-        removeQueryParameters: [/^utm_\w+/i, "ref"],
-      });
-    }
-    if (
-      result.includes("linkedin.com") &&
-      !result.includes("www.linkedin.com")
-    ) {
-      result = result.replace("linkedin.com", "www.linkedin.com");
-    }
+  public static sanitizeLinkedInUrl(raw: string): string | undefined | null {
+    try {
+      let result = raw;
+      const REGEX_WEBSITE = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+      if (REGEX_WEBSITE.test(raw)) {
+        result = normalizeUrl(raw, {
+          defaultProtocol: "https:",
+          forceHttps: true,
+          normalizeProtocol: true,
+          removeTrailingSlash: true,
+          sortQueryParameters: true,
+          stripAuthentication: true,
+          stripHash: true,
+          stripWWW: true,
+          removeQueryParameters: [/^utm_\w+/i, "ref"],
+        });
+      }
+      if (
+        result.includes("linkedin.com") &&
+        !result.includes("www.linkedin.com")
+      ) {
+        result = result.replace("linkedin.com", "www.linkedin.com");
+      }
 
-    return result;
+      return result;
+    } catch (error) {
+      return undefined;
+    }
   }
 
-  public static sanitizeFacebookUrl(raw: string): string {
-    let result = raw;
-    const REGEX_WEBSITE = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-    if (REGEX_WEBSITE.test(raw)) {
-      result = normalizeUrl(raw, {
-        defaultProtocol: "https:",
-        forceHttps: true,
-        normalizeProtocol: true,
-        removeTrailingSlash: true,
-        sortQueryParameters: true,
-        stripAuthentication: true,
-        stripHash: true,
-        stripWWW: true,
-        removeQueryParameters: [/^utm_\w+/i, "ref"],
-      });
-    }
-    if (
-      result.includes("facebook.com") &&
-      !result.includes("www.facebook.com")
-    ) {
-      result = result.replace("facebook.com", "www.facebook.com");
-    }
+  public static sanitizeFacebookUrl(raw: string): string | undefined | null {
+    try {
+      let result = raw;
+      const REGEX_WEBSITE = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+      if (REGEX_WEBSITE.test(raw)) {
+        result = normalizeUrl(raw, {
+          defaultProtocol: "https:",
+          forceHttps: true,
+          normalizeProtocol: true,
+          removeTrailingSlash: true,
+          sortQueryParameters: true,
+          stripAuthentication: true,
+          stripHash: true,
+          stripWWW: true,
+          removeQueryParameters: [/^utm_\w+/i, "ref"],
+        });
+      }
+      if (
+        result.includes("facebook.com") &&
+        !result.includes("www.facebook.com")
+      ) {
+        result = result.replace("facebook.com", "www.facebook.com");
+      }
 
-    return result;
+      return result;
+    } catch (error) {
+      return undefined;
+    }
   }
 
-  public static sanitizeTwitterUrl(raw: string): string {
-    let result = raw;
-    const REGEX_WEBSITE = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-    if (REGEX_WEBSITE.test(raw)) {
-      result = normalizeUrl(raw, {
-        defaultProtocol: "https:",
-        forceHttps: true,
-        normalizeProtocol: true,
-        removeTrailingSlash: true,
-        sortQueryParameters: true,
-        stripAuthentication: true,
-        stripHash: true,
-        stripWWW: true,
-        removeQueryParameters: [/^utm_\w+/i, "ref"],
-      });
-    }
+  public static sanitizeTwitterUrl(raw: string): string | undefined | null {
+    try {
+      let result = raw;
+      const REGEX_WEBSITE = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+      if (REGEX_WEBSITE.test(raw)) {
+        result = normalizeUrl(raw, {
+          defaultProtocol: "https:",
+          forceHttps: true,
+          normalizeProtocol: true,
+          removeTrailingSlash: true,
+          sortQueryParameters: true,
+          stripAuthentication: true,
+          stripHash: true,
+          stripWWW: true,
+          removeQueryParameters: [/^utm_\w+/i, "ref"],
+        });
+      }
 
-    return result;
+      return result;
+    } catch (error) {
+      return undefined;
+    }
   }
 
   /**
