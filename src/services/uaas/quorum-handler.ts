@@ -13,6 +13,7 @@ import {
   set,
   get,
   isNil,
+  isArray,
 } from "lodash";
 import { UaasHelpers } from "./uaas-helpers";
 
@@ -50,7 +51,55 @@ export class QuorumHandler {
 
     forEach(mapping.sources, (sourceAttrib: string) => {
       let attribVal = get(account, sourceAttrib, undefined);
-      if (!isNil(attribVal)) {
+
+      if (!isNil(attribVal) && isArray(attribVal)) {
+        forEach(attribVal, (a) => {
+          const normalizationsToApply = filter(
+            normalizations,
+            (n: uuasV1.Schema$NormalizationDefinition) => {
+              return n.sources.includes(sourceAttrib);
+            },
+          );
+
+          let sanitizedVal: any = a;
+          forEach(
+            normalizationsToApply,
+            (n: uuasV1.Schema$NormalizationDefinition) => {
+              if (n.method === "COUNTRY_NAME_OFFICIAL") {
+                sanitizedVal = UaasHelpers.sanitizeCountryNameOfficial(
+                  a as string,
+                );
+              } else if (n.method === "COUNTRY_NAME_COMMON") {
+                sanitizedVal = UaasHelpers.sanitizeCountryNameCommon(
+                  a as string,
+                );
+              } else if (n.method === "COUNTRY_CODE_CCA2") {
+                sanitizedVal = UaasHelpers.sanitizeCountryCodeCca2(a as string);
+              } else if (n.method === "COUNTRY_CODE_CCA3") {
+                sanitizedVal = UaasHelpers.sanitizeCountryCodeCca3(a as string);
+              } else if (n.method === "LINKEDIN_URL") {
+                sanitizedVal = UaasHelpers.sanitizeLinkedInUrl(a as string);
+              } else if (n.method === "FACEBOOK_URL") {
+                sanitizedVal = UaasHelpers.sanitizeFacebookUrl(a as string);
+              } else if (n.method === "TWITTER_URL") {
+                sanitizedVal = UaasHelpers.sanitizeTwitterUrl(a as string);
+              } else if (n.method === "PHONE_INTERNATIONAL") {
+                const countryCode = get(
+                  account,
+                  "unified/country_code",
+                  get(account, "unified/country", undefined),
+                );
+                sanitizedVal = UaasHelpers.normalizePhoneNumberInternational(
+                  a as string,
+                  countryCode as string | undefined,
+                );
+              }
+            },
+          );
+
+          quorumMembers.push(sanitizedVal);
+        });
+      } else if (!isNil(attribVal)) {
         const normalizationsToApply = filter(
           normalizations,
           (n: uuasV1.Schema$NormalizationDefinition) => {
@@ -83,6 +132,16 @@ export class QuorumHandler {
               attribVal = UaasHelpers.sanitizeFacebookUrl(attribVal as string);
             } else if (n.method === "TWITTER_URL") {
               attribVal = UaasHelpers.sanitizeTwitterUrl(attribVal as string);
+            } else if (n.method === "PHONE_INTERNATIONAL") {
+              const countryCode = get(
+                account,
+                "unified/country_code",
+                get(account, "unified/country", undefined),
+              );
+              attribVal = UaasHelpers.normalizePhoneNumberInternational(
+                attribVal as string,
+                countryCode as string | undefined,
+              );
             }
           },
         );

@@ -29,4 +29,8 @@ export const NORMALIZATION_AVAILABLEMETHODS: hull_connector_v1.Schema$OptionItem
     value: "TWITTER_URL",
     label: "Twitter Url",
   },
+  {
+    value: "PHONE_INTERNATIONAL",
+    label: "Phone (International Format)",
+  },
 ];

@@ -791,4 +791,70 @@ describe("UaasHelpers", () => {
       expect(actual).toBeUndefined();
     });
   });
+
+  describe("#normalizePhoneNumberInternational()", () => {
+    it("should format a semi-international format number without country code", () => {
+      // Arrange
+      const rawString = "+1-662-226-1901";
+      const countryCode = undefined;
+
+      // Act
+      const actual = UaasHelpers.normalizePhoneNumberInternational(
+        rawString,
+        countryCode,
+      );
+
+      // Assert
+      const expectedString = "+1 662-226-1901";
+      expect(actual).toEqual(expectedString);
+    });
+
+    it("should format a semi-international format number with country code", () => {
+      // Arrange
+      const rawString = "+1-662-226-1901";
+      const countryCode = "US";
+
+      // Act
+      const actual = UaasHelpers.normalizePhoneNumberInternational(
+        rawString,
+        countryCode,
+      );
+
+      // Assert
+      const expectedString = "+1 662-226-1901";
+      expect(actual).toEqual(expectedString);
+    });
+
+    it("should not format a national format number without country code", () => {
+      // Arrange
+      const rawString = "(662) 226-1901";
+      const countryCode = undefined;
+
+      // Act
+      const actual = UaasHelpers.normalizePhoneNumberInternational(
+        rawString,
+        countryCode,
+      );
+
+      // Assert
+      const expectedString = "(662) 226-1901";
+      expect(actual).toEqual(expectedString);
+    });
+
+    it("should format a national format number with country code", () => {
+      // Arrange
+      const rawString = "(662) 226-1901";
+      const countryCode = "US";
+
+      // Act
+      const actual = UaasHelpers.normalizePhoneNumberInternational(
+        rawString,
+        countryCode,
+      );
+
+      // Assert
+      const expectedString = "+1 662-226-1901";
+      expect(actual).toEqual(expectedString);
+    });
+  });
 });

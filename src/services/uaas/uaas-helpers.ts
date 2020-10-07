@@ -1,5 +1,11 @@
 import normalizeUrl from "normalize-url";
 import { URL } from "url";
+import { isNil } from "lodash";
+import {
+  PhoneNumberUtil,
+  PhoneNumber,
+  PhoneNumberFormat,
+} from "google-libphonenumber";
 import countryData from "../../../assets/data/countries.json";
 
 export class UaasHelpers {
@@ -112,6 +118,28 @@ export class UaasHelpers {
     } catch (error) {
       return undefined;
     }
+  }
+
+  public static normalizePhoneNumberInternational(
+    raw: string,
+    rawCountry: string | undefined,
+  ): string | undefined | null {
+    const phoneUtil = new PhoneNumberUtil();
+    const countryCode = isNil(rawCountry)
+      ? undefined
+      : UaasHelpers.sanitizeCountryCodeCca2(rawCountry);
+    let number: PhoneNumber | undefined;
+    try {
+      number = phoneUtil.parseAndKeepRawInput(raw, countryCode);
+    } catch (error) {
+      // TODO: Decide about logging
+    }
+
+    if (!isNil(number) && phoneUtil.isValidNumber(number)) {
+      return phoneUtil.format(number, PhoneNumberFormat.INTERNATIONAL);
+    }
+
+    return raw;
   }
 
   /**
