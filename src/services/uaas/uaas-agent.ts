@@ -1,8 +1,7 @@
-import { AwilixContainer } from "awilix";
-import { forEach, pick, set, get, first } from "lodash";
+import { AwilixContainer, asClass } from "awilix";
+import { forEach, pick, set, get, first, isNil } from "lodash";
 import { HullConnectorFlowControlResponse } from "../../definitions/hull/hull-connector";
-import { uuasV1 } from "../../definitions/uaas/v1";
-import { QuorumHandler } from "./quorum-handler";
+import { uaasV1 } from "../../definitions/uaas/v1";
 import { DiffHelpers } from "./diff-helpers";
 import { HullClient } from "../hull/hull-client";
 import {
@@ -10,6 +9,7 @@ import {
   HullBatchItem,
 } from "../../definitions/hull/hull-api";
 import { DateTime } from "luxon";
+import { QuorumStrategyHandler } from "./strategy-handlers/quorum";
 
 const getDurationInMilliseconds = (start: [number, number]): number => {
   const NS_PER_SEC = 1e9;
@@ -24,22 +24,101 @@ export class UaaSAgent {
 
   constructor(diContainer: AwilixContainer) {
     this.diContainer = diContainer;
+    this.diContainer.register("quorumHandler", asClass(QuorumStrategyHandler));
   }
 
-  public async handleUserUpdateMessages(): Promise<
-    HullConnectorFlowControlResponse
-  > {
-    const flowResponse: HullConnectorFlowControlResponse = {
-      errors: [],
-      metrics: [],
-      flow_control: {
-        type: "next",
-        size: 200,
-        in: 1,
-      },
-    };
+  public async handleUserUpdateMessages(
+    snRequest: any,
+  ): Promise<HullConnectorFlowControlResponse> {
+    try {
+      const start = process.hrtime();
+      const hullClient: HullClient = this.diContainer.resolve<HullClient>(
+        "hullClient",
+      );
 
-    return Promise.resolve(flowResponse);
+      const batchPayload: HullBatchPayload = {
+        timestamp: DateTime.utc().toISO() as string,
+        sentAt: DateTime.utc().toISO() as string,
+        batch: [],
+      };
+
+      const strategyHandlers: uaasV1.Resource$StrategyHandler[] = this.initializeStrategyHandlers();
+
+      forEach(snRequest.messages, (msg: any) => {
+        let attributesToChange = {};
+        forEach(strategyHandlers, (strategyHandler) => {
+          const changedAttribs = strategyHandler.handleUser({
+            ...msg.user,
+            account: msg.account,
+          });
+
+          const diffedAttribs = DiffHelpers.diffUserAttributes(
+            msg.user,
+            changedAttribs,
+          );
+
+          attributesToChange = {
+            ...attributesToChange,
+            ...diffedAttribs,
+          };
+        });
+
+        // TODO: Replace with real logging
+        // console.log(">>> Firehose Attributes", attributesToChange);
+        if (Object.keys(attributesToChange).length > 0) {
+          const userIdent = pick(msg.user, ["id", "external_id", "email"]);
+          if (get(msg, "user.anonymous_ids", []).length > 0) {
+            set(userIdent, "anonymous_id", first(msg.user.anonymous_ids));
+          }
+          const batchItem: HullBatchItem = {
+            type: "traits",
+            timestamp: DateTime.utc().toISO() as string,
+            headers: {
+              "Hull-Access-Token": HullClient.createJwtUser(
+                hullClient.connectorAuth,
+                userIdent,
+              ),
+            },
+            body: attributesToChange,
+          };
+
+          batchPayload.batch.push(batchItem);
+        }
+      });
+
+      await hullClient.sendToFirehose(batchPayload);
+      const durationInMilliseconds = getDurationInMilliseconds(start);
+      let flowControlSize = 50;
+      if (durationInMilliseconds <= 1000) {
+        flowControlSize = 200;
+      } else if (durationInMilliseconds <= 2000) {
+        flowControlSize = 150;
+      } else if (durationInMilliseconds <= 3000) {
+        flowControlSize = 100;
+      }
+
+      const flowResponse: HullConnectorFlowControlResponse = {
+        errors: [],
+        metrics: [],
+        flow_control: {
+          type: "next",
+          size: flowControlSize,
+          in: 1,
+        },
+      };
+
+      return flowResponse;
+    } catch (error) {
+      return {
+        errors: [error.message],
+        metrics: [],
+        flow_control: {
+          type: "retry",
+          size: 50,
+          in: 1,
+        },
+      };
+    }
   }
 
   public async handleAccountUpdateMessages(
@@ -47,45 +126,37 @@ export class UaaSAgent {
   ): Promise<HullConnectorFlowControlResponse> {
     try {
       const start = process.hrtime();
-      const appSettings: uuasV1.Schema$AppSettings = this.diContainer.resolve<
-        uuasV1.Schema$AppSettings
-      >("hullAppSettings");
 
       const hullClient: HullClient = this.diContainer.resolve<HullClient>(
         "hullClient",
       );
 
-      const quorumHandler = new QuorumHandler();
+      // const quorumHandler = new QuorumHandler();
       const batchPayload: HullBatchPayload = {
         timestamp: DateTime.utc().toISO() as string,
         sentAt: DateTime.utc().toISO() as string,
         batch: [],
       };
 
+      const strategyHandlers: uaasV1.Resource$StrategyHandler[] = this.initializeStrategyHandlers();
       forEach(snRequest.messages, (msg: any) => {
         let attributesToChange = {};
-        forEach(appSettings.account_mappings_quorum, (mappingQuorum) => {
-          const changedAttribs = quorumHandler.handleAccount(
-            msg.account,
-            {
-              ...mappingQuorum,
-              strategy: "QUORUM",
-            },
-            appSettings.account_normalizations,
-          );
-          // TODO: Replace with real logging
-          // console.log(">>> Changed Attributes", changedAttribs);
+        forEach(strategyHandlers, (strategyHandler) => {
+          const changedAttribs = strategyHandler.handleAccount({
+            ...msg.account,
+          });
+
           const diffedAttribs = DiffHelpers.diffAccountAttributes(
             msg.account,
             changedAttribs,
           );
-          // TODO: Replace with real logging
-          // console.log(">>> Diffed Attributes", diffedAttribs);
+
           attributesToChange = {
             ...attributesToChange,
             ...diffedAttribs,
           };
         });
+
         // TODO: Replace with real logging
         // console.log(">>> Firehose Attributes", attributesToChange);
         if (Object.keys(attributesToChange).length > 0) {
@@ -136,6 +207,7 @@ export class UaaSAgent {
 
       return flowResponse;
     } catch (error) {
+      console.error(error);
       return {
         errors: [error.message],
         metrics: [],
@@ -146,5 +218,19 @@ export class UaaSAgent {
         },
       };
     }
+  }
+
+  private initializeStrategyHandlers(): uaasV1.Resource$StrategyHandler[] {
+    const strategyHandlers: uaasV1.Resource$StrategyHandler[] = [];
+    const quorumHandler = this.diContainer.resolve<QuorumStrategyHandler>(
+      "quorumHandler",
+      {
+        allowUnregistered: true,
+      },
+    );
+    if (!isNil(quorumHandler)) {
+      strategyHandlers.push(quorumHandler);
+    }
+    return strategyHandlers;
   }
 }

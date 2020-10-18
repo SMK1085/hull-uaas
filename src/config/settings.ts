@@ -5,6 +5,46 @@ import {
 
 export const privateSettings: HullConnectorSetting[] = [
   {
+    name: "user_mappings_quorum",
+    type: "array",
+    title: "Unified Attributes defined by Quorum",
+    description: "The attributes to define by using the quorum strategy.",
+    format: "table",
+    items: {
+      type: "object",
+      properties: {
+        name: {
+          title: "Unified Attribute Name",
+          type: "string",
+          format: "trait",
+          options: {
+            allowCreate: true,
+            source: "unified",
+          },
+        },
+        sources: {
+          title: "Source Attributes",
+          type: "array",
+          format: "trait",
+          options: {
+            uniqueItems: true,
+          },
+        },
+        normalization_method: {
+          title: "Normalization",
+          type: "string",
+          default: "NONE",
+          format: "select",
+          options: {
+            allowCreate: false,
+            loadOptions: "/meta/methods/normalization",
+            placeholder: "Normalization Method",
+          },
+        },
+      },
+    },
+  },
+  {
     name: "account_mappings_quorum",
     type: "array",
     title: "Unified Attributes defined by Quorum",
@@ -30,35 +70,15 @@ export const privateSettings: HullConnectorSetting[] = [
             uniqueItems: true,
           },
         },
-      },
-    },
-  },
-  {
-    // url: /meta/methods/normalization
-    name: "account_normalizations",
-    type: "array",
-    title: "Attribute Value Normalizations",
-    description: "The attributes to normalize before applying unification",
-    format: "table",
-    items: {
-      type: "object",
-      properties: {
-        method: {
-          title: "Method",
+        normalization_method: {
+          title: "Normalization",
           type: "string",
+          default: "NONE",
           format: "select",
           options: {
             allowCreate: false,
             loadOptions: "/meta/methods/normalization",
             placeholder: "Normalization Method",
-          },
-        },
-        sources: {
-          title: "Source Attributes",
-          type: "array",
-          format: "accountTrait",
-          options: {
-            uniqueItems: true,
           },
         },
       },
@@ -68,12 +88,14 @@ export const privateSettings: HullConnectorSetting[] = [
 
 export const settingsSections: HullConnectorSettingsSection[] = [
   {
+    title: "User Unification",
+    description: "Define how data on the user level gets unified.",
+    properties: ["private_settings.user_mappings_quorum"],
+  },
+  {
     title: "Account Unification",
     description: "Define how data on the account level gets unified.",
-    properties: [
-      "private_settings.account_mappings_quorum",
-      "private_settings.account_normalizations",
-    ],
+    properties: ["private_settings.account_mappings_quorum"],
   },
 ];
 

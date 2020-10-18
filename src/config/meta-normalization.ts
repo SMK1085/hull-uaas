@@ -2,6 +2,10 @@ import { hull_connector_v1 } from "../definitions/hull/hull-connector-v1";
 
 export const NORMALIZATION_AVAILABLEMETHODS: hull_connector_v1.Schema$OptionItem[] = [
   {
+    value: "NONE",
+    label: "No normalization",
+  },
+  {
     value: "COUNTRY_NAME_COMMON",
     label: "Common Country Name",
   },
@@ -32,5 +36,17 @@ export const NORMALIZATION_AVAILABLEMETHODS: hull_connector_v1.Schema$OptionItem
   {
     value: "PHONE_INTERNATIONAL",
     label: "Phone (International Format)",
+  },
+  {
+    value: "PHONE_E164",
+    label: "Phone (E164 Format)",
+  },
+  {
+    value: "DOMAIN",
+    label: "Domain",
+  },
+  {
+    value: "WEBSITE",
+    label: "Website",
   },
 ];

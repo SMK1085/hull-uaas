@@ -1,5 +1,5 @@
 import { Route } from "../../definitions/express/express-route";
-import { handleAvilableNormalizationMethods } from "./meta-helpers";
+import { handleAvilableNormalizationMethods } from "./route-handlers";
 import cors from "cors";
 
 export const uaasRoutes: Route[] = [

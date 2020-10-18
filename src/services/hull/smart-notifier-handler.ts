@@ -28,7 +28,7 @@ export const handleSmartNotifier = async (
   const agent = new UaaSAgent(scopedContainer);
   switch (snNotification.channel) {
     case "user:update":
-      snResponse = await agent.handleUserUpdateMessages();
+      snResponse = await agent.handleUserUpdateMessages(req.body);
       break;
     case "account:update":
       snResponse = await agent.handleAccountUpdateMessages(req.body);
