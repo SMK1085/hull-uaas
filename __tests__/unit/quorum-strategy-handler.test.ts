@@ -131,7 +131,7 @@ describe("QuorumStrategyHandler", () => {
   });
 
   describe("#handleAccount", () => {
-    it("should unify the country with method 'COUNTRY_NAME_COMMON'", () => {
+    it("should unify the country with method 'COUNTRY_NAME_COMMON' and country_code with 'COUNTRY_CODE_CCA2'", () => {
       // Arrange
       const hullAppSettings = {
         ...DEFAULT_SETTINGS,
@@ -147,6 +147,16 @@ describe("QuorumStrategyHandler", () => {
             "traits_clearbit/address_country",
           ],
           normalization_method: "COUNTRY_NAME_COMMON",
+        },
+        {
+          name: "unified/country_code",
+          sources: [
+            "traits_salesforce_lead/billing_country",
+            "traits_salesforce_contact/billing_country",
+            "traits_hubspot/country",
+            "traits_clearbit/address_country",
+          ],
+          normalization_method: "COUNTRY_CODE_CCA2",
         },
       ];
 
@@ -165,6 +175,8 @@ describe("QuorumStrategyHandler", () => {
       const expectedResult = {
         "unified/country": "Germany",
         "unified/country_confidence": 67,
+        "unified/country_code": "DE",
+        "unified/country_code_confidence": 67,
       };
 
       expect(actualResult).toEqual(expectedResult);

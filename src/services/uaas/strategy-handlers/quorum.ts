@@ -34,9 +34,9 @@ export class QuorumStrategyHandler implements uaasV1.Resource$StrategyHandler {
     const changedAttribs: Schema$HullAttributesUser = {};
 
     const mappings = this.appSettings.user_mappings_quorum;
-    let quorumMembers: any[] = [];
 
     forEach(mappings, (mapping: uaasV1.Schema$UnificationMappingBase) => {
+      let quorumMembers: any[] = [];
       const mappingResult = this.handleMapping(user, mapping);
       if (isArray(mappingResult)) {
         quorumMembers.push(...mappingResult);
@@ -45,7 +45,6 @@ export class QuorumStrategyHandler implements uaasV1.Resource$StrategyHandler {
       }
 
       quorumMembers = compact(quorumMembers);
-
       if (quorumMembers.length === 0) {
         return changedAttribs;
       }
@@ -71,10 +70,10 @@ export class QuorumStrategyHandler implements uaasV1.Resource$StrategyHandler {
     const changedAttribs: Schema$HullAttributesAccount = {};
 
     const mappings = this.appSettings.account_mappings_quorum;
-    let quorumMembers: any[] = [];
 
     forEach(mappings, (mapping: uaasV1.Schema$UnificationMappingBase) => {
       const mappingResult = this.handleMapping(account, mapping);
+      let quorumMembers: any[] = [];
       if (isArray(mappingResult)) {
         quorumMembers.push(...mappingResult);
       } else {
