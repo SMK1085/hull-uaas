@@ -39,6 +39,8 @@ export namespace uaasV1 {
   }
 
   export interface Schema$AppSettings {
+    user_mappings_priority: Schema$UnificationMappingBase[];
+    user_mappings_lastchange: Schema$UnificationMappingBase[];
     user_mappings_quorum: Schema$UnificationMappingBase[];
     user_normalizations?: Schema$NormalizationDefinition[];
     account_mappings_priority: Schema$UnificationMappingBase[];

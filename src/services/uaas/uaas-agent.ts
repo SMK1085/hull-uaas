@@ -10,6 +10,7 @@ import {
 } from "../../definitions/hull/hull-api";
 import { DateTime } from "luxon";
 import { QuorumStrategyHandler } from "./strategy-handlers/quorum";
+import { PriorityStrategyHandler } from "./strategy-handlers/priority";
 
 const getDurationInMilliseconds = (start: [number, number]): number => {
   const NS_PER_SEC = 1e9;
@@ -25,6 +26,10 @@ export class UaaSAgent {
   constructor(diContainer: AwilixContainer) {
     this.diContainer = diContainer;
     this.diContainer.register("quorumHandler", asClass(QuorumStrategyHandler));
+    this.diContainer.register(
+      "priorityHandler",
+      asClass(PriorityStrategyHandler),
+    );
   }
 
   public async handleUserUpdateMessages(
@@ -228,8 +233,17 @@ export class UaaSAgent {
         allowUnregistered: true,
       },
     );
+    const priorityHandler = this.diContainer.resolve<PriorityStrategyHandler>(
+      "priorityHandler",
+      {
+        allowUnregistered: true,
+      },
+    );
     if (!isNil(quorumHandler)) {
       strategyHandlers.push(quorumHandler);
+    }
+    if (!isNil(priorityHandler)) {
+      strategyHandlers.push(priorityHandler);
     }
     return strategyHandlers;
   }
