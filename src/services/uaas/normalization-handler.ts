@@ -12,6 +12,7 @@ import {
   normalizePhone,
   normalizeWebsite,
 } from "./normalization";
+import { normalizeFloat, normalizeInteger } from "./normalization/numeric";
 
 export class NormalizationHandler {
   readonly registeredMethods: {
@@ -33,6 +34,8 @@ export class NormalizationHandler {
       PHONE_INTERNATIONAL: this.handlePhoneInternational,
       PHONE_E164: this.handlePhoneE164,
       WEBSITE: this.handleWebsite,
+      INT: this.handleInteger,
+      FLOAT: this.handleFloat,
     };
   }
 
@@ -198,5 +201,29 @@ export class NormalizationHandler {
     }
 
     return normalizeWebsite(attribValue);
+  }
+
+  private handleInteger(attribValue: any): any {
+    if (isNil(attribValue)) {
+      return undefined;
+    }
+
+    if (isArray(attribValue)) {
+      return map(attribValue, (a) => normalizeInteger(a));
+    }
+
+    return normalizeInteger(attribValue);
+  }
+
+  private handleFloat(attribValue: any): any {
+    if (isNil(attribValue)) {
+      return undefined;
+    }
+
+    if (isArray(attribValue)) {
+      return map(attribValue, (a) => normalizeFloat(a));
+    }
+
+    return normalizeFloat(attribValue);
   }
 }

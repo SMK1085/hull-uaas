@@ -931,5 +931,138 @@ describe("NormalizationHandler", () => {
         });
       });
     });
+
+    describe("for method 'INT'", () => {
+      const normalizationMethod = "INT";
+      const testCases = [
+        {
+          description: "should return an integer if input as an integer",
+          attribVal: 1,
+          params: undefined,
+          expectedVal: 1,
+        },
+        {
+          description: "should return an integer if input as a float",
+          attribVal: 2.435648,
+          params: undefined,
+          expectedVal: 2,
+        },
+        {
+          description:
+            "should return an integer if input as a stringified integer",
+          attribVal: "2015",
+          params: undefined,
+          expectedVal: 2015,
+        },
+        {
+          description: "should return undefined if input is null",
+          attribVal: null,
+          params: undefined,
+          expectedVal: undefined,
+        },
+        {
+          description: "should return undefined if input is a boolean",
+          attribVal: false,
+          params: undefined,
+          expectedVal: undefined,
+        },
+        {
+          description:
+            "should return undefined if input is an arbitrary string",
+          attribVal: "the quick brown fox",
+          params: undefined,
+          expectedVal: undefined,
+        },
+        {
+          description:
+            "should return an array of integers if input as an array of integers",
+          attribVal: [0, 1, 20, 999, -1],
+          params: undefined,
+          expectedVal: [0, 1, 20, 999, -1],
+        },
+      ];
+
+      testCases.forEach((testCase) => {
+        it(testCase.description, () => {
+          // Arrange
+          const handler = new NormalizationHandler();
+
+          // Act
+          const actualVal = handler.handleNormalization(
+            testCase.attribVal,
+            normalizationMethod,
+          );
+
+          // Assert
+          expect(actualVal).toEqual(testCase.expectedVal);
+        });
+      });
+    });
+
+    describe("for method 'FLOAT'", () => {
+      const normalizationMethod = "FLOAT";
+      const testCases = [
+        {
+          description: "should return a float if input as a float",
+          attribVal: 1.567,
+          params: undefined,
+          expectedVal: 1.567,
+        },
+        {
+          description: "should return a float if input as an integer",
+          attribVal: 2,
+          params: undefined,
+          expectedVal: 2,
+        },
+        {
+          description: "should return a float if input as a stringified float",
+          attribVal: "99.756",
+          params: undefined,
+          expectedVal: 99.756,
+        },
+        {
+          description: "should return undefined if input is null",
+          attribVal: null,
+          params: undefined,
+          expectedVal: undefined,
+        },
+        {
+          description: "should return undefined if input is a boolean",
+          attribVal: false,
+          params: undefined,
+          expectedVal: undefined,
+        },
+        {
+          description:
+            "should return undefined if input is an arbitrary string",
+          attribVal: "the quick brown fox",
+          params: undefined,
+          expectedVal: undefined,
+        },
+        {
+          description:
+            "should return an array of floats if input as an array of floats",
+          attribVal: [0.1235, 1.23, 20.2, 999.978, -1.54631],
+          params: undefined,
+          expectedVal: [0.1235, 1.23, 20.2, 999.978, -1.54631],
+        },
+      ];
+
+      testCases.forEach((testCase) => {
+        it(testCase.description, () => {
+          // Arrange
+          const handler = new NormalizationHandler();
+
+          // Act
+          const actualVal = handler.handleNormalization(
+            testCase.attribVal,
+            normalizationMethod,
+          );
+
+          // Assert
+          expect(actualVal).toEqual(testCase.expectedVal);
+        });
+      });
+    });
   });
 });

@@ -10,6 +10,7 @@ import {
 } from "./country";
 import { normalizePhone } from "./phone";
 import { normalizeWebsite } from "./website";
+import { normalizeFloat, normalizeInteger } from "./numeric";
 
 export {
   normalizeDomain,
@@ -22,4 +23,6 @@ export {
   normalizeCountryNameOfficial,
   normalizePhone,
   normalizeWebsite,
+  normalizeFloat,
+  normalizeInteger,
 };

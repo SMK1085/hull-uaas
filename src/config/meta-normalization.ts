@@ -49,4 +49,12 @@ export const NORMALIZATION_AVAILABLEMETHODS: hull_connector_v1.Schema$OptionItem
     value: "WEBSITE",
     label: "Website",
   },
+  {
+    value: "INT",
+    label: "Integer",
+  },
+  {
+    value: "FLOAT",
+    label: "Floatig point number",
+  },
 ];
