@@ -11,6 +11,7 @@ import {
 import { DateTime } from "luxon";
 import { QuorumStrategyHandler } from "./strategy-handlers/quorum";
 import { PriorityStrategyHandler } from "./strategy-handlers/priority";
+import { EmailHandler } from "./data-quality/email";
 
 const getDurationInMilliseconds = (start: [number, number]): number => {
   const NS_PER_SEC = 1e9;
@@ -30,6 +31,7 @@ export class UaaSAgent {
       "priorityHandler",
       asClass(PriorityStrategyHandler),
     );
+    this.diContainer.register("emailHandler", asClass(EmailHandler));
   }
 
   public async handleUserUpdateMessages(
@@ -48,9 +50,13 @@ export class UaaSAgent {
       };
 
       const strategyHandlers: uaasV1.Resource$StrategyHandler[] = this.initializeStrategyHandlers();
+      const emailHandler = this.diContainer.resolve<EmailHandler>(
+        "emailHandler",
+      );
 
       forEach(snRequest.messages, (msg: any) => {
         let attributesToChange = {};
+        // Unification
         forEach(strategyHandlers, (strategyHandler) => {
           const changedAttribs = strategyHandler.handleUser({
             ...msg.user,
@@ -67,7 +73,20 @@ export class UaaSAgent {
             ...diffedAttribs,
           };
         });
+        // Data Validation
+        const emailCheckAttribs = emailHandler.handleUser({
+          ...msg.user,
+          account: msg.account,
+        });
+        const emailCheckDiffedAttribs = DiffHelpers.diffUserAttributes(
+          msg.user,
+          emailCheckAttribs,
+        );
 
+        attributesToChange = {
+          ...attributesToChange,
+          ...emailCheckDiffedAttribs,
+        };
         // TODO: Replace with real logging
         // console.log(">>> Firehose Attributes", attributesToChange);
         if (Object.keys(attributesToChange).length > 0) {

@@ -7,4 +7,7 @@ export const DEFAULT_SETTINGS: uaasV1.Schema$AppSettings = {
   user_mappings_lastchange: [],
   user_mappings_priority: [],
   user_mappings_quorum: [],
+  user_freemail_enabled: false,
+  user_freemail_attribute: "email",
+  user_freemail_blacklist: [],
 };

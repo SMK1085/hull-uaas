@@ -162,8 +162,26 @@ The following table illustrates some examples:
 | `https://linkedin.com/in/john-doe/` | _Invalid_                 |
 | `john-doe`                          | _Invalid_                 |
 
+## Data Quality
+
+Determining the quality of your data might be a challenge, the bloew helper functions aim to make it easier to handle common tasks.
+
+### Free, Disposable and Blacklisted Emails
+
+You can enable the email validation in the Settingsand pick the email attribute you like to be validated.
+Note, if you have multiple email attributes, it is recommended to run the unification first before validating the email.
+Once activated, it will set the attributes `unified/emailcheck_isfreemail` (for freemail addresses) and `emailcheck_isdisposable` (for disposable addresses).
+
+If you wish to flag emails as blacklisted, you can add the email domains to the blacklist in this section. The domain comparison is performed case-insensitive. If the email domain matches, it will set the user attribute `unified/emailcheck_isblacklist`.
+
+When the check runs it will automatically set the attribute `unified/emailcheck_email` to the email address which has been validated, so you have a direct reference.
+
 ## FAQ
 
 ### What is the source of the country data
 
 While there are a plenty of sources out there, this connector uses data from an open source repository. Please refer to the following [Website](https://git.io/countries) or [GitHub Repository](https://github.com/mledoze/countries).
+
+### What is the source for the freemail list
+
+There are plently of lists on the internet, but this connector uses data from an open source repository. Please refer to the [GitHub Repository](https://github.com/willwhite/freemail) for further details.

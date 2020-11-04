@@ -47,6 +47,9 @@ export namespace uaasV1 {
     account_mappings_lastchange: Schema$UnificationMappingBase[];
     account_mappings_quorum: Schema$UnificationMappingBase[];
     account_normalizations?: Schema$NormalizationDefinition[];
+    user_freemail_enabled?: boolean;
+    user_freemail_attribute?: string | null;
+    user_freemail_blacklist?: string[];
   }
 
   export interface Schema$UnificationMappingBase {
@@ -70,5 +73,9 @@ export namespace uaasV1 {
     handleAccount(
       account: Schema$HullAttributesAccount,
     ): Schema$HullAttributesAccount;
+  }
+
+  export interface Resource$UserHandler {
+    handleUser(user: Schema$HullAttributesUser): Schema$HullAttributesUser;
   }
 }

@@ -166,6 +166,34 @@ export const privateSettings: HullConnectorSetting[] = [
       },
     },
   },
+  {
+    name: "user_freemail_enabled",
+    type: "boolean",
+    title: "Check Email",
+    description:
+      "Checks whether the email address attribute against a freemail database and your configured blacklist.",
+    default: false,
+  },
+  {
+    name: "user_freemail_attribute",
+    title: "Email attribute",
+    type: "string",
+    format: "trait",
+    description: "The attribute containing the email address to check.",
+    default: "email",
+  },
+  {
+    name: "user_freemail_blacklist",
+    title: "Email Domain Blacklist",
+    description:
+      "Define additional blacklisted domains which will set the attribute `unified/emailcheck_isblacklist` to true.",
+    type: "array",
+    format: "table",
+    items: {
+      type: "string",
+    },
+    default: [],
+  },
 ];
 
 export const settingsSections: HullConnectorSettingsSection[] = [
@@ -175,6 +203,16 @@ export const settingsSections: HullConnectorSettingsSection[] = [
     properties: [
       "private_settings.user_mappings_priority",
       "private_settings.user_mappings_quorum",
+    ],
+  },
+  {
+    title: "Email Validation",
+    description:
+      "Check email addresses for free and disposable ones and against your own blacklist.",
+    properties: [
+      "private_settings.user_freemail_enabled",
+      "private_settings.user_freemail_attribute",
+      "private_settings.user_freemail_blacklist",
     ],
   },
   {
