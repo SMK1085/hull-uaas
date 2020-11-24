@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/SMK1085/hull-uaas/compare/v1.0.0...v1.0.1) (2020-11-24)
+
+
+### Bug Fixes
+
+* **manifest-handler:** fix missing batch tags for kraken-exports tag ([6a36b2e](https://github.com/SMK1085/hull-uaas/commit/6a36b2e5db2fe53b0a9fc0c26932699e736968c1))
+
 # 1.0.0 (2020-11-24)
 
 

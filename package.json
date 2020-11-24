@@ -1,6 +1,6 @@
 {
   "name": "hull-uaas",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Hull Unification-as-a-Service",
   "main": "src/index.ts",
   "scripts": {
