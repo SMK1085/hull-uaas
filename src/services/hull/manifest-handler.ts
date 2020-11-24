@@ -64,6 +64,10 @@ const defineTags = (): string[] => {
     }
   });
 
+  if (process.env.HULL_KRAKEN_EXPORTS === "true") {
+    tags.push("kraken-exports");
+  }
+
   return tags;
 };
 
