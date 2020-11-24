@@ -57,4 +57,16 @@ export const NORMALIZATION_AVAILABLEMETHODS: hull_connector_v1.Schema$OptionItem
     value: "FLOAT",
     label: "Floatig point number",
   },
+  {
+    value: "LOWERCASE",
+    label: "Lowercase",
+  },
+  {
+    value: "UPPERCASE",
+    label: "Uppercase",
+  },
+  {
+    value: "STARTCASE",
+    label: "Startcase",
+  },
 ];

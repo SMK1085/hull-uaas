@@ -13,6 +13,11 @@ import {
   normalizeWebsite,
 } from "./normalization";
 import { normalizeFloat, normalizeInteger } from "./normalization/numeric";
+import {
+  normalizeToLowercase,
+  normalizeToUppercase,
+  normalizeToStartcase,
+} from "./normalization/casing";
 
 export class NormalizationHandler {
   readonly registeredMethods: {
@@ -36,6 +41,9 @@ export class NormalizationHandler {
       WEBSITE: this.handleWebsite,
       INT: this.handleInteger,
       FLOAT: this.handleFloat,
+      LOWERCASE: this.handleLowercase,
+      UPPERCASE: this.handleUppercase,
+      STARTCASE: this.handleStartcase,
     };
   }
 
@@ -225,5 +233,41 @@ export class NormalizationHandler {
     }
 
     return normalizeFloat(attribValue);
+  }
+
+  private handleLowercase(attribValue: any): any {
+    if (isNil(attribValue)) {
+      return undefined;
+    }
+
+    if (isArray(attribValue)) {
+      return map(attribValue, (a) => normalizeToLowercase(a));
+    }
+
+    return normalizeToLowercase(attribValue);
+  }
+
+  private handleUppercase(attribValue: any): any {
+    if (isNil(attribValue)) {
+      return undefined;
+    }
+
+    if (isArray(attribValue)) {
+      return map(attribValue, (a) => normalizeToUppercase(a));
+    }
+
+    return normalizeToUppercase(attribValue);
+  }
+
+  private handleStartcase(attribValue: any): any {
+    if (isNil(attribValue)) {
+      return undefined;
+    }
+
+    if (isArray(attribValue)) {
+      return map(attribValue, (a) => normalizeToStartcase(a));
+    }
+
+    return normalizeToStartcase(attribValue);
   }
 }
