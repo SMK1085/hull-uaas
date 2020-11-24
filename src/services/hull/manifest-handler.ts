@@ -65,6 +65,12 @@ const defineTags = (): string[] => {
   });
 
   if (process.env.HULL_KRAKEN_EXPORTS === "true") {
+    if (!tags.includes("batch")) {
+      tags.push("batch");
+    }
+    if (!tags.includes("batch-accounts")) {
+      tags.push("batch-accounts");
+    }
     tags.push("kraken-exports");
   }
 
