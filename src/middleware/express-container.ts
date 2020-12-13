@@ -4,9 +4,7 @@ import { createContainer, asValue, asClass } from "awilix";
 import { ClientOpts } from "redis";
 import { ConnectorRedisClient } from "../utils/redis-client";
 import { LoggerOptions, format, transports, createLogger } from "winston";
-import LogzioWinstonTransport from "winston-logzio";
 import packageInfo from "../../package.json";
-import { isNil } from "lodash";
 
 export const initializeContainer = (router: Router): void => {
   router.use((req: Request, _res: Response, next: NextFunction) => {
@@ -31,7 +29,7 @@ export const initializeContainer = (router: Router): void => {
     loggerOptions.transports = [];
 
     if (process.env.NODE_ENV === "development") {
-      loggerOptions.transports.push(
+      loggerOptions.transports = [
         new transports.Console({
           format: format.combine(
             format.colorize({ all: true }),
@@ -61,20 +59,15 @@ export const initializeContainer = (router: Router): void => {
               }`;
             }),
           ),
-        }),
-      );
-    }
-
-    if (!isNil(process.env.LOGZIO_TOKEN)) {
-      loggerOptions.transports.push(
-        new LogzioWinstonTransport({
-          token: process.env.LOGZIO_TOKEN as string,
-          host: "listener.logz.io",
-          protocol: "https",
-          name: loggerOptions.defaultMeta.service,
-          level: process.env.LOG_LEVEL || "error",
-        }),
-      );
+        })
+      ];
+    } else {
+      loggerOptions.transports = [
+        new transports.Console({
+          level: "info",
+          format: format.combine(format.json())
+        })
+      ];
     }
 
     const globalLogger = createLogger(loggerOptions);

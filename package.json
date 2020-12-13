@@ -25,7 +25,7 @@
     "lint-markdown": "markdownlint --ignore coverage --ignore dist --ignore node_modules '**/*.md' '.**/**/*.md'",
     "ngrok": "ngrok http 8079 --subdomain=hull-uaas --region=eu",
     "ngrokfree": "ngrok http 8079",
-    "start": "pm2-runtime start ecosystem.config.js",
+    "start": "node dist/index.js",
     "start--dev": "NODE_ENV=development npm run start",
     "start--dev--watch": "NODE_ENV=development npm run start-src--watch",
     "start-src": "babel-node --extensions .js,.jsx,.ts,.tsx --require ./node_modules/dotenv/config ./src/index.ts",
@@ -34,11 +34,12 @@
     "test--watch": "jest --watch",
     "test--clear": "jest --clearCache",
     "typecheck": "tsc --noEmit",
-    "typecheck--watch": "npm run typecheck -- --watch"
+    "typecheck--watch": "npm run typecheck -- --watch",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SMK1085/hull-uaas.git"
+    "url": "git+https://github.com/hull/hull-uaas.git"
   },
   "keywords": [
     "hull",
@@ -49,13 +50,13 @@
   ],
   "author": {
     "name": "Sven Maschek",
-    "url": "https://www.github.com/SMK1085"
+    "url": "https://www.github.com/hull"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SMK1085/hull-uaas/issues"
+    "url": "https://github.com/hull/hull-uaas/issues"
   },
-  "homepage": "https://github.com/SMK1085/hull-uaas#readme",
+  "homepage": "https://github.com/hull/hull-uaas#readme",
   "dependencies": {
     "awilix": "^4.2.6",
     "axios": "^0.19.2",
@@ -69,12 +70,10 @@
     "lodash": "^4.17.15",
     "luxon": "^1.24.1",
     "normalize-url": "^5.1.0",
-    "pm2": "^4.4.0",
     "qs": "^6.9.4",
     "redis": "^3.0.2",
     "uuid": "^8.3.0",
-    "winston": "^3.2.1",
-    "winston-logzio": "^5.1.2"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
